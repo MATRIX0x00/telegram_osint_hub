@@ -1,0 +1,119 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram OSINT Reconnaissance Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body data-theme="matrix">
+    <div class="container">
+        <header>
+            <div class="brand">
+                <h1><i class="fa-brands fa-telegram radar-sweep-icon"></i> Telegram OSINT Recon Hub</h1>
+                <span class="tagline">Autonomous Cybercrime Tracking, Identity Resolution & Threat Reconnaissance</span>
+            </div>
+            <div class="header-actions">
+                <button id="soundToggleBtn" class="icon-btn" title="Toggle Sound FX"><i class="fa-solid fa-volume-high" id="soundIcon"></i></button>
+                <button id="clearAllBtn" class="btn-clear" title="Clean All Cards & Intel Cache"><i class="fa-solid fa-trash-can"></i> CLEAR INTEL</button>
+                <button id="settingsBtn" class="icon-btn" title="Settings"><i class="fa-solid fa-gear"></i></button>
+            </div>
+        </header>
+
+        <!-- RECON LAUNCH BAR -->
+        <div class="recon-control-panel">
+            <div class="recon-input-wrapper">
+                <i class="fa-brands fa-telegram icon-search"></i>
+                <input type="text" id="targetDomainInput" placeholder="Telegram Username (e.g. durov), Phone (+1415..., +44...), or Channel Name..." autocomplete="off">
+                <button id="runOsintBtn" class="btn-scan"><i class="fa-solid fa-radar"></i> PROBE TELEGRAM</button>
+            </div>
+        </div>
+
+        <!-- REAL-TIME TELEMETRY & PROGRESS HUD -->
+        <div id="reconHud" class="recon-hud hidden">
+            <div class="hud-status-bar">
+                <div class="hud-radar-status"><span class="radar-dot active"></span> <span id="hudStatusText">SCANNING IN PROGRESS...</span></div>
+                <div class="hud-progress-counter" id="hudModuleCounter">[0 / 16 Modules Active]</div>
+            </div>
+            <div class="progress-track">
+                <div class="progress-bar" id="progressBar" style="width: 0%;"></div>
+            </div>
+            <div class="terminal-strip">
+                <span class="term-prompt">&gt;</span> <span id="liveTerminalLog">Initializing Telegram OSINT socket...</span>
+            </div>
+        </div>
+
+        <!-- FILTER & ACTIVE BADGE & VIEW SWITCH -->
+        <div class="filter-bar">
+            <div class="search-box">
+                <i class="fa-solid fa-filter"></i>
+                <input type="text" id="filterCardInput" placeholder="Filter Telegram cards by username, phone, crypto, C2, forensics, dorks...">
+            </div>
+            <div class="filter-right-cluster">
+                <span id="activeTargetLabel" class="target-badge">Target: Standby</span>
+                <div class="view-mode-switcher">
+                    <button id="viewGridBtn" class="view-mode-btn active" title="Standard Grid Cards View"><i class="fa-solid fa-table-cells-large"></i> Grid</button>
+                    <button id="viewGraphBtn" class="view-mode-btn" title="Interactive Cyber Graph View"><i class="fa-solid fa-circle-nodes"></i> Graph</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- LIVE CARD STREAM CONTAINER -->
+        <main id="cardsContainer" class="osint-grid"></main>
+
+        <!-- INTERACTIVE GRAPH CANVAS CONTAINER -->
+        <section id="graphContainer" class="graph-container hidden">
+            <div class="graph-hud-overlay">
+                <div class="graph-hud-info">
+                    <span class="graph-badge"><i class="fa-brands fa-telegram"></i> <span id="graphNodeCount">0 Nodes Linked</span></span>
+                    <span class="graph-hint"><i class="fa-solid fa-computer-mouse"></i> Drag nodes &bull; Scroll to zoom &bull; Hover for Telegram intel card</span>
+                </div>
+                <div class="graph-hud-actions">
+                    <button id="resetGraphBtn" class="graph-hud-btn" title="Reset Graph Center & Zoom"><i class="fa-solid fa-crosshairs"></i> Recenter</button>
+                </div>
+            </div>
+            <canvas id="graphCanvas"></canvas>
+            <div id="graphPopup" class="graph-popup hidden"></div>
+        </section>
+    </div>
+
+    <!-- SETTINGS MODAL -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-sliders"></i> Environment Configuration</h2>
+                <span class="close" id="closeSettings">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label><i class="fa-solid fa-palette"></i> Interface Theme:</label>
+                    <select id="cfg-theme">
+                        <option value="matrix">The Matrix (Hacker Green)</option>
+                        <option value="cyberpunk">Cyberpunk (Neon High-Tech)</option>
+                        <option value="default">Dark Slate (Tactical)</option>
+                        <option value="dracula">Dracula (Deep Purple)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fa-solid fa-volume-high"></i> Synthesizer Sound FX:</label>
+                    <select id="cfg-sound">
+                        <option value="true">Enabled (Real-time Audio Feedback)</option>
+                        <option value="false">Muted (Silent Mode)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fa-solid fa-folder-open"></i> Telegram Intel Data Directory:</label>
+                    <input type="text" id="cfg-data-path">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveSettingsBtn" class="btn-save">Save Configuration</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast"></div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
